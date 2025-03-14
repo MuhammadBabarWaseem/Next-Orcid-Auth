@@ -53,12 +53,20 @@ export default function Home() {
             <p>Access Token: {session?.accessToken}</p>
 
             <p>
-              <button onClick={fetchData}>
+              <button
+                className="px-6 py-2 rounded-lg flex gap-4 cursor-pointer text-black items-center justify-center w-full bg-green-500 text-sm"
+                onClick={fetchData}
+              >
                 Show My ORCID Data in the Console
               </button>
             </p>
 
-            <button onClick={() => signOut()}>Sign out</button>
+            <button
+              className="px-6 py-2 rounded-lg flex gap-4 cursor-pointer text-black items-center justify-center w-full bg-red-500 text-sm"
+              onClick={() => signOut()}
+            >
+              Sign out
+            </button>
           </>
         )}
       </div>
