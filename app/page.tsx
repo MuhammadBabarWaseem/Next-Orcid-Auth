@@ -21,7 +21,7 @@ export default function Home() {
 
   const handleOrcidLogin = async () => {
     try {
-      const res = await signIn("orcid");
+      const res = await signIn("orcid", { callbackUrl: "/" });
       if (res?.error) {
         console.log({ ERROR: res.error });
       } else {
