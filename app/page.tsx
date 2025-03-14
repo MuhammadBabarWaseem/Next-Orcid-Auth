@@ -39,13 +39,13 @@ export default function Home() {
       <div className="flex flex-col justify-center items-center h-full gap-20">
         <button
           onClick={handleGoogleLogin}
-          className="px-6 py-2 rounded-lg flex gap-4 cursor-pointer text-black items-center justify-center w-full bg-green-400 text-sm"
+          className="px-6 py-2 rounded-lg flex gap-4 cursor-pointer text-black items-center justify-center w-full bg-green-500 text-sm"
         >
           Sign In with Google
         </button>
         <button
           onClick={handleOrcidLogin}
-          className="px-6 py-2 rounded-lg flex gap-4 cursor-pointer text-black items-center justify-center w-full bg-blue-400 text-sm"
+          className="px-6 py-2 rounded-lg flex gap-4 cursor-pointer text-black items-center justify-center w-full bg-blue-500 text-sm"
         >
           Sign In with Orcid
         </button>
