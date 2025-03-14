@@ -1,15 +1,16 @@
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
+import { NextRequest } from "next/server";
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest) {
   const session = await getServerSession(authOptions);
 
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }
 
-  const orcidId = params.id;
-  const url = `https://pub.orcid.org/v3.0/${orcidId}`;
+  const id = req.nextUrl.pathname.split("/").pop() as string;
+  const url = `https://pub.orcid.org/v3.0/${id}`;
 
   const res = await fetch(url, {
     headers: {
