@@ -1,13 +1,18 @@
 import GoogleProvider from "next-auth/providers/google";
-import type { NextAuthOptions } from "next-auth";
+import type { NextAuthOptions, Session, User } from "next-auth";
+
+declare module "next-auth" {
+  interface User {
+    id?: string;
+  }
+
+  interface Session {
+    accessToken?: string;
+  }
+}
 
 export const authOptions: NextAuthOptions = {
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      allowDangerousEmailAccountLinking: true,
-    }),
     {
       id: "orcid",
       name: "ORCID",
@@ -40,7 +45,7 @@ export const authOptions: NextAuthOptions = {
       },
       profile(profile) {
         return {
-          id: profile["orcid-identifier"].path,
+          id: profile["orcid-identifier"].path, 
           name:
             profile.person?.name?.["given-names"]?.value +
             " " +
@@ -50,42 +55,20 @@ export const authOptions: NextAuthOptions = {
       },
     },
   ],
-  pages: {
-    signIn: "/signin",
-  },
-  session: {
-    strategy: "jwt",
-    maxAge: 30 * 60, // Expire in 30 minutes
-  },
   callbacks: {
-    async jwt({ token, user }: { token: any; user: any }) {
-      console.log({ token, user });
-      if (user) {
-        token.user = user;
-        if (user.accessToken) {
-          token.accessToken = user.accessToken;
-        }
-      }
-      return token;
-    },
-    async session({
-      session,
-      user,
-      token,
-    }: {
-      session: any;
-      user: any;
-      token: any;
-    }) {
-      console.log({ token, user, session });
-      if (token.user) {
-        session.user._id = token.user._id;
-        session.user.email = token.user.email;
-        session.user.name = token.user.userName;
-        session.user.image = token.user.imageUrl;
-        session.user.accessToken = token.accessToken;
+    async session({ session, token }) {
+      session.accessToken = token.accessToken as string;
+      if (session.user) {
+        (session.user as User).id = token.orcid as string;
       }
       return session;
+    },
+    async jwt({ token, account }) {
+      if (account) {
+        token.accessToken = account.access_token;
+        token.orcid = account.orcid;
+      }
+      return token;
     },
   },
 };
