@@ -40,7 +40,9 @@ export const authOptions: NextAuthOptions = {
               },
             }
           );
-          return await res.json();
+          const orcidData = await res.json();
+          console.log('ORCIDddd --->', orcidData);
+          return orcidData;
         },
       },
       profile(profile) {
